@@ -12,7 +12,9 @@
 do {    \
     if (!(cond)) {  \
         throw std::runtime_error(   \
-            "Expectation failed: " Stringify(cond));   \
+            "Expectation failed" \
+            ": " Stringify(cond) \
+            " (" __FILE__ ":" Stringify(__LINE__) ")"); \
     }   \
 }   \
 while (0)
@@ -21,7 +23,8 @@ while (0)
 do {    \
     assert(0 != ::testy::testy_context() &&  \
         "testy_context() is NULL. This shouldn't happen!"); \
-    (*::testy::testy_context()) << (x);  \
+    (*::testy::testy_context()) << "" Stringify(x) " == " << (x)  \
+        << " (" << __FILE__ << ":" Stringify(__LINE__) << ")"; \
 }   \
 while (0)
 

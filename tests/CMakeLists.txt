@@ -5,7 +5,7 @@ add_executable(
 
 target_link_libraries(
     TMTFTestProg
-    TestyMcTestFace
+    testy
 )
 
 add_definitions(

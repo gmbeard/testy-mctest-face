@@ -1,6 +1,7 @@
 #include "testy/testy.hpp"
 #include <string>
 #include <iostream>
+#include <stddef.h>
 
 using namespace testy;
 
@@ -22,7 +23,7 @@ std::stringstream*& testy::testy_context() {
 }
 
 int testy::run_all_tests() {
-    bool succeeded = true;
+    size_t failed = 0; 
     for (FunctionIter it = all_tests().cbegin();
          it != all_tests().cend();
          ++it)
@@ -31,20 +32,30 @@ int testy::run_all_tests() {
         testy_context() = &ctx;
         try {
             (it->first)();
-            std::cerr << (it->second) << " succeeded!\n";
+            std::cerr << "✔︎ " << (it->second) << "\n";
         }
         catch (std::exception const& e) {
-            std::cerr << (it->second) << " failed!: " << e.what() << "\n";
-            succeeded = false;
+            failed += 1;
+            std::cerr << "✘ " << (it->second) << ": " << e.what() << "\n";
             std::string capture = ctx.str();
             if (!capture.empty()) {
-                std::cerr << "CAPTURE:\n" << capture << "\n";
+                std::cerr << "  ▶︎ CAPTURE: " << capture << "\n";
             }
         }
         testy_context() = 0;
     }
 
-    return succeeded ? 0 : -1;
+    std::cerr << "\nTests succeeded: " 
+        << all_tests().size() - failed << "/" << all_tests().size();
+
+    if (failed) {
+        std::cerr << " ✘\n";
+    }
+    else {
+        std::cerr << " ✔︎\n";
+    }
+
+    return failed == 0 ? 0 : -1;
 }
 
 InlineRegistration::InlineRegistration(TestyMcTestFaceFunction f,

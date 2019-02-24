@@ -3,9 +3,9 @@
 #define UNUSED(x) (void)(x)
 
 McTest(add_two) {
-    int r = 1 + 1;
+    int r = 1 + 2;
     Capture(r);
-    Expect(r == 3);
+    Expect(r == 2);
 }
 
 McTest(add_three) {
