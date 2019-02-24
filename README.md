@@ -30,6 +30,8 @@ this target.
 ### Writing Tests
 Tests are created using the `McTest(...) { ... }` macro. E.g.
 
+    #include "testy/testy.hpp"
+
     McTest(add_two) {
         Expect(1 + 1 == 2);
     }
