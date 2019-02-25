@@ -24,8 +24,8 @@ std::stringstream*& testy::testy_context() {
 
 int testy::run_all_tests() {
     size_t failed = 0; 
-    for (FunctionIter it = all_tests().cbegin();
-         it != all_tests().cend();
+    for (FunctionIter it = all_tests().begin();
+         it != all_tests().end();
          ++it)
     {
         std::stringstream ctx;
