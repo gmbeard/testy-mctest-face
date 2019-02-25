@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <utility>
+#include <cassert>
 
 #define StringifyImpl(x) #x
 #define Stringify(x) StringifyImpl(x)
