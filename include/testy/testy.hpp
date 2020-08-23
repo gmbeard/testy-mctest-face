@@ -9,28 +9,41 @@
 
 #define StringifyImpl(x) #x
 #define Stringify(x) StringifyImpl(x)
-#define Expect(cond)    \
-do {    \
-    if (!(cond)) {  \
-        throw std::runtime_error(   \
-            "Expectation failed" \
-            ": " Stringify(cond) \
+#define Expect(cond)                        \
+do {                                        \
+    if (!(cond)) {                          \
+        throw std::logic_error(             \
+            "Expectation failed"            \
+            ": " Stringify(cond)            \
             " (" __FILE__ ":" Stringify(__LINE__) ")"); \
-    }   \
-}   \
+    }                                       \
+}                                           \
 while (0)
 
-#define Capture(x)  \
-do {    \
-    assert(0 != ::testy::testy_context() &&  \
-        "testy_context() is NULL. This shouldn't happen!"); \
-    (*::testy::testy_context()) << "" Stringify(x) " == " << (x)  \
-        << " (" << __FILE__ << ":" Stringify(__LINE__) << ")"; \
-}   \
+#define ExpectThrows(statement, err_type)   \
+do {                                        \
+    bool thrown = false;                    \
+    try {                                   \
+        statement;                          \
+    }                                       \
+    catch (err_type const&) {               \
+        thrown = true;                      \
+    }                                       \
+    Expect(thrown && "Statement should have thrown");   \
+}                                           \
 while (0)
 
-#define McTest(name)    \
-void name();    \
+#define Capture(x)                          \
+do {                                        \
+    assert(0 != ::testy::testy_context() && \
+        "testy_context() is NULL. This shouldn't happen!");         \
+    (*::testy::testy_context()) << "" Stringify(x) " == " << (x)    \
+        << " (" << __FILE__ << ":" Stringify(__LINE__) << ")";      \
+}                                           \
+while (0)
+
+#define McTest(name)                        \
+void name();                                \
 ::testy::InlineRegistration const reg_##name(name, "" Stringify(name)); \
 inline void name()
 
